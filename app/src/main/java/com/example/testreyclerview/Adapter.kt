@@ -21,7 +21,11 @@ class Adapter : ListAdapter<Item, ItemViewHolder>(ItemDiffCallback()) {
         holder.bind(getItem(position))
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int, payloads: MutableList<Any>) {
+    override fun onBindViewHolder(
+        holder: ItemViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads)
         } else {
@@ -29,6 +33,21 @@ class Adapter : ListAdapter<Item, ItemViewHolder>(ItemDiffCallback()) {
                 holder.bind(item = getItem(position))
             }
         }
+    }
+
+    fun setData(list: List<Item>, isDetailScreen: Boolean = false) {
+        val isNotEmptyOrList = list.any { it.value != null }
+        var newList = listOf<Item>()
+        if (!isDetailScreen) {
+            newList = if (isNotEmptyOrList && list.size > 5) {
+                list.take(5)
+            } else {
+                list
+            }
+        } else {
+            newList = list
+        }
+        submitList(newList.toMutableList())
     }
 
 }
@@ -41,7 +60,6 @@ class ItemViewHolder(
         this.binding.tvNumber.text = item.value
     }
 }
-
 
 
 class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
@@ -57,3 +75,4 @@ class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
         return if (oldItem.value != newItem.value) newItem.value else null
     }
 }
+

@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDataAdapter() {
-        adapter.submitList(getDataFromApi())
+        adapter.setData(getDataFromApi())
     }
 
     private fun getDataFromApi(): List<Item> {
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         hashMap.put("PMP48","36")
         hashMap.put("PMP49","36")
         hashMap.put("PMP50","36")
-        return hashMap.toList().map {
+        return LinkedHashMap<String, String>(hashMap).toList().map {
             Item(it.first, it.second)
         }
     }
